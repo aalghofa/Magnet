@@ -1,5 +1,5 @@
 from Magnet import app, db
-from flask import render_template, redirect, session, request, url_for
+from flask import render_template, redirect, session, request, url_for, flash
 from employee.form import RegisterForm, LoginForm
 from employee.models import Employee
 from employee.decorators import login_required, admin_required
@@ -16,6 +16,7 @@ def login():
 
     if form.validate_on_submit():
         employee = Employee.query.filter_by(
+        	live=True,
             username=form.username.data,
             ).first()
         if employee:
@@ -48,7 +49,8 @@ def register():
             form.job_title.data,
             form.username.data,
             hashed_password,
-            False
+            False,
+            True
         )
         db.session.add(employee)
         db.session.commit()
@@ -61,7 +63,8 @@ def register():
 @login_required
 @admin_required
 def admin():
-    posts = Employee.query.order_by(Employee.id.desc())
+    #posts = Employee.query.order_by(Employee.id.desc())
+    posts = Employee.query.filter_by(live=True).order_by(Employee.id.desc())
     return render_template('employee/admin.html', posts=posts)
 
 @app.route('/success')
@@ -70,7 +73,14 @@ def success():
     return "employee registered!"
 
 
-
+@app.route('/delete/<int:employee_id>')
+@admin_required
+def delete(employee_id):
+    employee = Employee.query.filter_by(id=employee_id).first_or_404()
+    employee.live = False
+    db.session.commit()
+    flash("Employee deleted")
+    return redirect('/admin')
 
 
 

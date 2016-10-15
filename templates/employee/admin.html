@@ -12,33 +12,43 @@
 
 <hr/>
     <div class="post-list">
+      {% include '_flashmessages.html' %}
       {% for employee in posts %}
       <div class="post-item">
         <table class = "table table-bordered">
-   <caption>List of Employees</caption>
-   
+   <caption>Employee's Info</caption>
+
    <thead>
       <tr>
          <th>Name</th>
          <th>Username</th>
          <th>Job Title</th>
+         <th>Email</th>
       </tr>
    </thead>
    
    <tbody>
       <tr>
-         <td>{{ employee.fullname }}</td>
+        <td>{{ employee.fullname }}</td>
          <td>{{ employee.username }}</td>
          <td>{{ employee.job_title }}</td>
+         <td>{{ employee.email }}</td>
       </tr>
 
    </tbody>
   
 </table>
+    {% if session.get('is_admin') %}
+      <a href="{{ url_for('delete', employee_id=employee.id) }}">Delete</a>
+    {% endif %}
+
 
         <hr />
       </div>
       {% endfor %}
+          {% if session.get('is_admin') %}
+      <a href="{{ url_for('register') }}">Add a New Employee</a>
+    {% endif %}
     </div>
     
   </div>
