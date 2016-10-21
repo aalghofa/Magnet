@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Blog Admin{% endblock %}
+{% block title %}Manage Employees{% endblock %}
 
 {% block content %}
 
@@ -39,7 +39,7 @@
   
 </table>
     {% if session.get('is_admin') %}
-      <a href="{{ url_for('delete', employee_id=employee.id) }}">Delete</a>
+      <a href="{{ url_for('delete', employee_id=employee.id) }}">Deactivate</a>
     {% endif %}
 
 
@@ -49,9 +49,13 @@
           {% if session.get('is_admin') %}
       <a href="{{ url_for('register') }}">Add a New Employee</a>
     {% endif %}
+
     </div>
-    
+
+
   </div>
+
+
 
 </div>
 {% endblock %}

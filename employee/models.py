@@ -11,7 +11,9 @@ from Magnet import db
 class Employee(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     fullname = db.Column(db.String(80))
+    ssn = db.Column(db.Integer) ##########################
     email = db.Column(db.String(35), unique=True)
+    DOB = db.Column(db.Date)
     job_title = db.Column(db.String(20))
     username = db.Column(db.String(80), unique=True)
     password = db.Column(db.String(60))
@@ -20,9 +22,11 @@ class Employee(db.Model):
     live = db.Column(db.Boolean)
     #posts = db.relationship('Post', backref='employee', lazy='dynamic')
     
-    def __init__(self, fullname, email, job_title, username, password, is_admin=False, live=True):
+    def __init__(self, fullname, ssn, email, DOB, job_title, username, password, is_admin=False, live=True):
         self.fullname = fullname
+        self.ssn = ssn
         self.email = email
+        self.DOB = DOB
         self.job_title = job_title
         self.username = username
         self.password = password
