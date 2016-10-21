@@ -4,7 +4,7 @@ from employee.form import RegisterForm, LoginForm
 from employee.models import Employee
 from employee.decorators import login_required, admin_required
 import bcrypt
-
+from flask_table import Table, Col
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
@@ -45,9 +45,7 @@ def register():
         hashed_password = bcrypt.hashpw(form.password.data, salt)
         employee = Employee(
             form.fullname.data,
-            form.ssn.data,
             form.email.data,
-            form.DOB.data,
             form.job_title.data,
             form.username.data,
             hashed_password,
@@ -60,7 +58,7 @@ def register():
         return redirect('/success')
     return render_template('employee/register.html', form=form)
 
-##########################list of Active employees #####################
+##########################list of employees #####################
 @app.route('/admin')
 @login_required
 @admin_required
@@ -86,21 +84,21 @@ def delete(employee_id):
 
 
 
-############################### Deactivated Employeees ################
-@app.route('/inactive')
-@login_required
-@admin_required
-def inactive():
-    #posts = Employee.query.order_by(Employee.id.desc())
-    posts = Employee.query.filter_by(live=False).order_by(Employee.id.desc())
-    return render_template('employee/inactive.html', posts=posts)
+# @app.route('/ItemTable')
+# # Declare your table
+# class ItemTable(Table):
+#     fullname = Col('Name')
+#     username = Col('username')
 
-@app.route('/reactivate/<int:employee_id>')
-@admin_required
-def reactivate(employee_id):
-    employee = Employee.query.filter_by(id=employee_id).first_or_404()
-    employee.live = True
-    db.session.commit()
-    flash("Employee Activate")
-    return redirect('/inactive')
+# # Get some objects
+# class Item(object):
+#     def __init__(self, fullname, username):
+#         self.fullname = fullname
+#         self.username = username
+# items = Employee.query.all()
 
+# # Populate the table
+# table = ItemTable(items)
+
+# # Print the html
+# print(table.__html__())
