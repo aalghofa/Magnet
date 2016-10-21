@@ -1,6 +1,6 @@
 from flask_wtf import Form
 from wtforms import validators, StringField, PasswordField
-from wtforms.fields.html5 import EmailField, DateField, IntegerField
+from wtforms.fields.html5 import EmailField
 
 class RegisterForm(Form):
     fullname = StringField('Full Name', [validators.Required()])
@@ -8,12 +8,10 @@ class RegisterForm(Form):
             validators.Required(),
             validators.Length(min=4, max=25)
         ])
-    ssn = IntegerField('ssn', [validators.Required()])
     email = EmailField('Email', [
             validators.Required(),
             validators.Length(min=8, max=25)
         ])
-    DOB = DateField('Date of Birth', [validators.Required()])
     job_title = StringField('Job title', [
             validators.Required(),
             validators.Length(min=4, max=20)
