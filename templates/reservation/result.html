@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Results{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+  <div class="col-md-offset-3 col-md-6">
+
+
+    {% from "_formhelpers.html" import render_field %}
+ 
+
+      {% for room in result %}
+      <div class="post-item">
+        <table class = "table table-bordered">
+   <caption>Here is the available rooms</caption>
+
+   <thead>
+      <tr>
+         <th>Room Type</th>
+         <th>Price</th>
+      </tr>
+   </thead>
+   
+   <tbody>
+      <tr>
+        <td>{{ room.room_type }}</td>
+         <td>{{ room.price }} $</td>
+      </tr>
+
+   </tbody>
+  
+</table>
+		
+      <a href="{{ url_for('book', room_id=room.id) }}">Book</a>
+
+        <hr />
+      </div>
+      {% endfor %}
+
+      
+
+
+  </div>
+
+</div>
+
+{% endblock %}
