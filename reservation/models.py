@@ -18,17 +18,10 @@ class Search(db.Model):
 		self.date_out = date_out
 		self.members = members 
 
-
-##create a virtual table that does not appear in the database, it only exists to link the room to reservation
-reserved = db.Table('reserved', 
-	db.Column('reservation_id', db.Integer, db.ForeignKey('reservation.reservation_id')),
-	db.Column('room_id', db.Integer, db.ForeignKey('room.room_id'))
-
-	)
-
 #create table for reservation
 class Reservation(db.Model):
 	reservation_id = db.Column(db.Integer, primary_key = True)
+	room_id = db.Column(db.Integer, db.ForeignKey('room.room_id'))
 	first_name = db.Column(db.String(80))
 	last_name = db.Column(db.String(80))
 	date_in = db.Column(db.Date)
@@ -41,10 +34,12 @@ class Reservation(db.Model):
 	state = db.Column(db.String(80))
 	zip_code = db.Column(db.String(20))
 
-	reserved = db.relationship('Room',secondary=reserved, backref=db.backref('guest', lazy='dynamic'))
+	# reserved = db.relationship('Room', backref='reservation', lazy='dynamic')
 
-	def __init__(self,first_name,last_name,date_in,date_out,members,email,phone_num,address,city,state,zip_code):
+
+	def __init__(self,room ,first_name,last_name,date_in,date_out,members,email,phone_num,address,city,state,zip_code):
 		self.first_name = first_name
+		self.room_id = room.room_id
 		self.last_name = last_name
 		self.date_in = date_in
 		self.date_out = date_out
@@ -67,7 +62,10 @@ class Room(db.Model):
 	room_type = db.Column(db.String(40))
 	status = db.Column(db.Boolean)
 	price = db.Column(db.Numeric(6,2))
-	# rooms = db.relationship('Reserved', backref = 'room', lazy = 'dynamic')
+
+	reserved = db.relationship('Reservation', backref='room', lazy='dynamic')
+	# reserved = db.relationship('Reserved', backref='room', lazy='dynamic')
+
 	def __init__(self,room_num,room_type,status,price):
 		self.room_num = room_num
 		self.room_type = room_type
@@ -75,15 +73,20 @@ class Room(db.Model):
 		self.price = price
 
 	def __repr__(self):
-		return '<Room %r>' % self.room_type
+		return '<Room %r>' % self.room_num
+
 
 
 # class Reserved(db.Model):
 # 	id = db.Column(db.Integer, primary_key = True)
-# 	reserve_id = db.Column(db.Integer, db.ForeignKey('reservation.id'))
-# 	# room_id = db.Column(db.Integer, db.ForeignKey('room.id'))
+# 	reserve_id = db.Column(db.Integer, db.ForeignKey('reservation.reservation_id'))
+# 	# room_id = db.Column(db.Integer, db.ForeignKey('room.room_id'))
+# 	# first_name = db.Column(db.String(40), db.ForeignKey('reservation.first_name'))
 
-
+# 	def __init__(self,reservation,room):
+# 		self.reserve_id = reservation.reservation_id
+		# self.room_id = room.room_id
+		# self.first_name = reservation.first_name
 
 #room id should be in reserved 
 #reservation id should be in reserved
