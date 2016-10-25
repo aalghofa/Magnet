@@ -19,6 +19,7 @@
 
    <thead>
       <tr>
+        <th>Room Id</th>
          <th>Room Type</th>
          <th>Price</th>
       </tr>
@@ -26,6 +27,7 @@
    
    <tbody>
       <tr>
+        <td>{{ room.room_id }}</td>
         <td>{{ room.room_type }}</td>
          <td>{{ room.price }} $</td>
       </tr>
@@ -34,7 +36,7 @@
   
 </table>
 		
-      <a href="{{ url_for('book', room_id=room.id) }}">Book</a>
+      <a href="{{ url_for('book', room_id=room.room_id) }}">Book</a>
 
         <hr />
       </div>
