@@ -1,6 +1,6 @@
 # Display reservation view for guest
 # Yousef Alahrbi
-# 10/19/2016
+# 10/25/2016
 
 
 # add libraries
@@ -8,7 +8,7 @@ from Magnet import app, db
 from flask import render_template, redirect, session, request, url_for, flash
 from reservation.form import SearchForm, ReservationForm, AddRoomForm
 from reservation.models import Search, Reservation, Room
-
+from datetime import date
 #add routes
 @app.route('/', methods=('GET', 'POST'))
 def search():
@@ -21,12 +21,19 @@ def search():
 			)	
 		db.session.add(search)
 		db.session.commit()
-		return redirect('/results')
+		return redirect(url_for('results', search_id=search.id))
+		return redirect('/results/<int:search_id>')
 	return render_template('reservation/search.html', form = form)
+
 	
-@app.route('/results', methods=('GET', 'POST'))
-def results():
-	result = Room.query.filter_by(status = True)
+@app.route('/results/<int:search_id>', methods=('GET', 'POST'))
+def results(search_id):
+	result_search = request.args.get('search.date_in')
+	result_reservation = request.args.get('reservation.date_out')
+
+	if result_search == result_reservation:
+		result = Room.query.filter_by(room_id = session['room_id'])
+
 	return render_template('reservation/result.html', result = result)
 
 @app.route('/book/<int:room_id>')
