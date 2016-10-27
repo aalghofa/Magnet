@@ -8,7 +8,7 @@ from Magnet import db
 
 
 class Search(db.Model):
-	id = db.Column(db.Integer, primary_key = True)
+	id = db.Column(db.Integer, primary_key = True) ## id remove 
 	date_in = db.Column(db.Date)
 	date_out = db.Column(db.Date)
 	members = db.Column(db.Integer)
@@ -20,6 +20,7 @@ class Search(db.Model):
 
 #create table for reservation
 class Reservation(db.Model):
+	__searchable__ = ['date_in', 'date_out']
 	reservation_id = db.Column(db.Integer, primary_key = True)
 	room_id = db.Column(db.Integer, db.ForeignKey('room.room_id'))
 	first_name = db.Column(db.String(80))
@@ -58,7 +59,7 @@ class Reservation(db.Model):
 #create table for room
 class Room(db.Model):
 	room_id = db.Column(db.Integer, primary_key = True)
-	room_num = db.Column(db.String(30), unique = True)
+	room_num = db.Column(db.Integer, unique = True)
 	room_type = db.Column(db.String(40))
 	status = db.Column(db.Boolean)
 	price = db.Column(db.Numeric(6,2))

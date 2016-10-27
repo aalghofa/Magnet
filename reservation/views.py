@@ -18,7 +18,12 @@ def search():
 			form.date_in.data,
 			form.date_out.data,
 			form.members.data
-			)	
+			)
+		## start a session for the given dates
+		if search:
+			session['date_in'] = form.date_in.data
+			session['date_out'] = form.date_out.data
+
 		db.session.add(search)
 		db.session.commit()
 		return redirect('/results')
@@ -26,7 +31,8 @@ def search():
 	
 @app.route('/results', methods=('GET', 'POST'))
 def results():
-	result = Room.query.filter_by(status = True)
+	result = Room.query.filter_by(status = False)
+
 	return render_template('reservation/result.html', result = result)
 
 @app.route('/book/<int:room_id>')
@@ -63,6 +69,8 @@ def reserv():
 			last_name=form.last_name.data,
 			date_in=form.date_in.data,
 			date_out=form.date_out.data,
+			# date_in = Search.query.filter_by(date_in=session['date_in']).first(),
+			# date_out = Search.query.filter_by(date_out=session['date_in']).first(),
 			members=form.members.data,
 			email=form.email.data,
 			phone_num=form.phone_num.data,
@@ -84,11 +92,7 @@ def reserv():
 	
 @app.route('/reserve_guest')
 def reserve_guest():
-	# author = Author.query.filter_by(username=session['username']).first()
-	# reservation = Reservation.query.filter_by(last_name=session['last_name'])
-	# reserved = Reserved(reservation)
-	# db.session.add(reserved)
-	# db.session.commit()
+
 	return "All done"
 
 
