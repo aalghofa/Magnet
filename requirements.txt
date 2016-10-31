@@ -6,3 +6,4 @@ flask-wtf
 py-bcrypt
 flask-migrate
 datetime
+flask-whooshalchemy == 0.8

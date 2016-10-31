@@ -37,23 +37,25 @@ def login():
 
 @app.route('/register', methods=('GET', 'POST'))
 #admin is required to fill the form in order to add a Receptionist
-@admin_required
+#@admin_required
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(form.password.data, salt)
-        employee = Employee(
-            form.fullname.data,
-            form.ssn.data,
-            form.email.data,
-            form.DOB.data,
-            form.job_title.data,
-            form.username.data,
-            hashed_password,
-            False,
-            True
-        )
+        fullname = form.fullname.data
+        ssn = form.ssn.data
+        email = form.email.data
+        DOB = form.DOB.data
+        job_title = form.job_title.data
+        username = form.username.data
+        password = hashed_password
+        if job_title == 'Maneger' or job_title == 'maneger':
+            is_admin = True
+        else:
+            is_admin = False
+        live = True
+        employee = Employee(fullname,ssn,email,DOB,job_title,username,password,is_admin,live)
         db.session.add(employee)
         db.session.commit()
 
