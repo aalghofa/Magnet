@@ -9,6 +9,7 @@ from wtforms import validators, StringField, PasswordField
 from wtforms.fields.html5 import EmailField, DateField, IntegerField
 
 
+
 class SearchForm(Form):
 	date_in = DateField('Check in', [validators.Required()])
 	date_out = DateField('Check out', [validators.Required()])

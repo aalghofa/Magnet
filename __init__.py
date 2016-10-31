@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-import flask_whooshalchemy
+#import flask_whooshalchemy as wa
 
 app = Flask(__name__)
 app.config.from_object('settings')
@@ -11,7 +11,8 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 
-app.config['WHOOSH_BASE'] = 'whoosh'
+# app.config['WHOOSH_BASE'] = 'whoosh'
+
 
 from reservation import views
 from employee import views

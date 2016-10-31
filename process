@@ -1,0 +1,7 @@
+  PID TTY           TIME CMD
+  456 ttys000    0:00.02 -bash
+ 1227 ttys000    0:00.18 /usr/local/mysql/bin/mysql -u root -p
+  466 ttys001    0:01.74 -bash
+ 1199 ttys001    0:02.09 /Library/Frameworks/Python.framework/Versions/3.5/Resources/Python.app/Contents/MacOS/Python /Library/Frameworks/Python.framework/Versions/3.5/bin/eb create --database --database.engine mysql --database.instance db.t1.micro
+12680 ttys001    0:00.64 python manage.py runserver
+12780 ttys001    0:34.01 /Users/abdullahalghofaili/Desktop/capston/Magnet/venv/bin/python manage.py runserver

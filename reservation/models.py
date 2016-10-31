@@ -4,7 +4,8 @@
 
 
 # add libraries
-from Magnet import db
+from Magnet import db, app
+
 
 
 class Search(db.Model):
@@ -20,7 +21,7 @@ class Search(db.Model):
 
 #create table for reservation
 class Reservation(db.Model):
-	__searchable__ = ['date_in', 'date_out']
+
 	reservation_id = db.Column(db.Integer, primary_key = True)
 	room_id = db.Column(db.Integer, db.ForeignKey('room.room_id'))
 	first_name = db.Column(db.String(80))
@@ -34,11 +35,14 @@ class Reservation(db.Model):
 	city = db.Column(db.String(80))
 	state = db.Column(db.String(80))
 	zip_code = db.Column(db.String(20))
+	check_in = db.Column(db.Boolean)
+	check_out = db.Column(db.Boolean)
+
 
 	# reserved = db.relationship('Room', backref='reservation', lazy='dynamic')
 
 
-	def __init__(self,room ,first_name,last_name,date_in,date_out,members,email,phone_num,address,city,state,zip_code):
+	def __init__(self,room ,first_name,last_name,date_in,date_out,members,email,phone_num,address,city,state,zip_code, check_in=False, check_out=False):
 		self.first_name = first_name
 		self.room_id = room.room_id
 		self.last_name = last_name
@@ -51,6 +55,8 @@ class Reservation(db.Model):
 		self.city = city
 		self.state = state
 		self.zip_code = zip_code
+		self.check_in = check_in
+		self.check_out = check_out
 
 	def __repr__(self):
 		return '<Reservation %r>' % self.last_name
@@ -63,7 +69,8 @@ class Room(db.Model):
 	room_type = db.Column(db.String(40))
 	status = db.Column(db.Boolean)
 	price = db.Column(db.Numeric(6,2))
-
+	booked_from = db.Column(db.Date)
+	book_release = db.Column(db.Date)
 	reserved = db.relationship('Reservation', backref='room', lazy='dynamic')
 	# reserved = db.relationship('Reserved', backref='room', lazy='dynamic')
 
@@ -91,8 +98,6 @@ class Room(db.Model):
 
 #room id should be in reserved 
 #reservation id should be in reserved
-
-
 
 
 
