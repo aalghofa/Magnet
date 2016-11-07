@@ -1,18 +1,18 @@
 # Create database for reservation 
 # Yousef Alharbi
-# 10/19/2016
+# 10/28/2016
 
 
 # add libraries
-from Magnet import db, app
-
+from Magnet import db
 
 
 class Search(db.Model):
-	id = db.Column(db.Integer, primary_key = True) ## id remove 
+	id = db.Column(db.Integer, primary_key = True)
 	date_in = db.Column(db.Date)
 	date_out = db.Column(db.Date)
 	members = db.Column(db.Integer)
+	
 
 	def __init__(self,date_in,date_out,members):
 		self.date_in = date_in
@@ -23,7 +23,7 @@ class Search(db.Model):
 class Reservation(db.Model):
 
 	reservation_id = db.Column(db.Integer, primary_key = True)
-	room_id = db.Column(db.Integer, db.ForeignKey('room.room_id'))
+	room_num = db.Column(db.Integer, db.ForeignKey('room.room_num'))
 	first_name = db.Column(db.String(80))
 	last_name = db.Column(db.String(80))
 	date_in = db.Column(db.Date)
@@ -39,12 +39,9 @@ class Reservation(db.Model):
 	check_out = db.Column(db.Boolean)
 
 
-	# reserved = db.relationship('Room', backref='reservation', lazy='dynamic')
-
-
-	def __init__(self,room ,first_name,last_name,date_in,date_out,members,email,phone_num,address,city,state,zip_code, check_in=False, check_out=False):
+	def __init__(self,room,first_name,last_name,date_in,date_out,members,email,phone_num,address,city,state,zip_code, check_in = False, check_out = False):
 		self.first_name = first_name
-		self.room_id = room.room_id
+		self.room_num = room.room_num
 		self.last_name = last_name
 		self.date_in = date_in
 		self.date_out = date_out
@@ -57,22 +54,20 @@ class Reservation(db.Model):
 		self.zip_code = zip_code
 		self.check_in = check_in
 		self.check_out = check_out
-
 	def __repr__(self):
 		return '<Reservation %r>' % self.last_name
 
 
 #create table for room
 class Room(db.Model):
-	room_id = db.Column(db.Integer, primary_key = True)
-	room_num = db.Column(db.Integer, unique = True)
+	room_num = db.Column(db.Integer, primary_key= True)
 	room_type = db.Column(db.String(40))
 	status = db.Column(db.Boolean)
 	price = db.Column(db.Numeric(6,2))
-	booked_from = db.Column(db.Date)
+	book_from = db.Column(db.Date)
 	book_release = db.Column(db.Date)
 	reserved = db.relationship('Reservation', backref='room', lazy='dynamic')
-	# reserved = db.relationship('Reserved', backref='room', lazy='dynamic')
+	
 
 	def __init__(self,room_num,room_type,status,price):
 		self.room_num = room_num
@@ -98,6 +93,8 @@ class Room(db.Model):
 
 #room id should be in reserved 
 #reservation id should be in reserved
+
+
 
 
 

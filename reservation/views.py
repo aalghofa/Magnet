@@ -1,15 +1,18 @@
 # Display reservation view for guest
 # Yousef Alahrbi
-# 10/25/2016
+# 10/29/2016
 
 
 # add libraries
-from Magnet import app, db
+from Magnet import app, db, mail
 from flask import render_template, redirect, session, request, url_for, flash
 from reservation.form import SearchForm, ReservationForm, AddRoomForm
 from reservation.models import Search, Reservation, Room
+from reservation.decorators import login_required, admin_required
 from datetime import date
 from sqlalchemy import text
+from flask_mail import Mail, Message
+
 
 #add routes
 @app.route('/', methods=('GET', 'POST'))
@@ -17,51 +20,54 @@ def search():
 	form = SearchForm()
 	if form.validate_on_submit():
 		search = Search(
-			date_in=form.date_in.data,
-			date_out=form.date_out.data,
-			members=form.members.data
+			form.date_in.data,
+			form.date_out.data,
+			form.members.data
 			)
-		# if search:
-		# 	session['date_in'] = form.date_in.data
-		# 	session['date_out'] = form.date_out.data
+		first_check = Room.query.filter_by(status = True).all()
+		second_check = Room.query.filter(Room.book_release <= search.date_in).all()
+		third_check = Room.query.filter(Room.book_release > search.date_in).all()
 
+		#if date is not correct
 		if form.date_in.data >= form.date_out.data:
-			flash ("Please Enter a Valid date")
-		else:
-			return redirect(url_for('results'))
-		db.session.add(search)
-		db.session.commit()
+			flash ("Please enter a valid date")
+
+		#if all the rooms are avalible	
+		elif first_check:
+			result_sta = Room.query.filter_by(status=True).order_by(Room.room_num.desc())
+			return render_template('reservation/result.html', result = result_sta)
+
+		# if there are no rooms availble
+		elif third_check:
+			flash ("No rooms available, Please Select another date")
+
+
+		#condtions to be satisfied 
+		elif second_check:
+			result = Room.query.filter(Room.book_release <= search.date_in).all()
+			return render_template('reservation/result.html', result = result)
+
+
+		
+
+			db.session.add(search)
+			db.session.commit()
+		
 	return render_template('reservation/search.html', form = form)
 
 
-@app.route('/results', methods=('GET', 'POST'))
-def results():
-	# if Room.query.filter_by(booked_from == None).first():
-	# 	sql_search = text('select distinct(room_id), room_type, room_num, price from room join search where (date_in = book_release) or (date_in > book_release)')
-	# 	result_ = db.engine.execute(sql_search)
-	# 	return redirect(url_for('results', result=result_))
-	# result_ch = Room.query.filter_by(state=True).first()
-	# if result_ch:
-	# 	result = Room.query.filter_by(state=True).first()
-	# 	return redirect(url_for('results', result=result))
-	# else:
-	sql_search = text('select distinct(room_id), room_type, room_num, price from room join search where (date_in = book_release) or (date_in > book_release)')
-	result_ = db.engine.execute(sql_search)
-		# return redirect(url_for('results', result=result_))
-
-
-	return render_template('reservation/result.html', result = result_)	
-
-
-@app.route('/book/<int:room_id>')
-def book(room_id):
-    room = Room.query.filter_by(room_id=room_id).first_or_404()
-    session['room_id'] = room_id
+@app.route('/book/<int:room_num>')
+def book(room_num):
+    room = Room.query.filter_by(room_num=room_num).first_or_404()
+    session['room_num'] = room_num
     room.status = False
     db.session.commit()
     return redirect('/reserv')
 
+
 @app.route('/addroom', methods=('GET', 'POST'))
+@login_required
+@admin_required
 def addroom():
 	form = AddRoomForm()
 	if form.validate_on_submit():
@@ -73,8 +79,9 @@ def addroom():
 			)	
 		db.session.add(room)
 		db.session.commit()
-		return redirect('/')
-	return render_template('reservation/addroom.html', form = form)
+		flash ("Room is successfully added")
+		return redirect('addroom')
+	return render_template('addroom.html', form = form)
     
 
 @app.route('/reserv', methods=('GET', 'POST'))
@@ -82,54 +89,89 @@ def reserv():
 	form = ReservationForm()
 	if form.validate_on_submit():
 		reservation = Reservation(
-			room = Room.query.filter_by(room_id=session['room_id']).first(),
-			first_name=form.first_name.data,
-			last_name=form.last_name.data,
-			date_in=form.date_in.data,
-			date_out=form.date_out.data,
-			# date_in = Search.query.filter_by(date_in=session['date_in']).first(),
-			# date_out = Search.query.filter_by(date_out=session['date_in']).first(),
-			members=form.members.data,
-			email=form.email.data,
-			phone_num=form.phone_num.data,
-			address=form.address.data,
-			city=form.city.data,
-			state=form.state.data,
-			zip_code=form.zip_code.data,
-			# False,
-			# False
+			Room.query.filter_by(room_num=session['room_num']).first(),
+			form.first_name.data,
+			form.last_name.data,
+			form.date_in.data,
+			form.date_out.data,
+			form.members.data,
+			form.email.data,
+			form.phone_num.data,
+			form.address.data,
+			form.city.data,
+			form.state.data,
+			form.zip_code.data,
+			False,
+			False
 			)
-		# date_in = Search.query.filter_by(date_in=session['date_in']).first()
-		# date_out = Search.query.filter_by(date_out=session['date_in']).first()
-		room = Room.query.filter_by(room_id=session['room_id']).first()
-		room.booked_from = form.date_in.data
+		room = Room.query.filter_by(room_num = session['room_num']).first()
+		room.book_from = form.date_in.data
 		room.book_release = form.date_out.data
+		# msg = Message("Send Mail Tutorial!",
+		# 	sender="magnetreservations@gmail.com",
+		# 	recipients=["magnetreservations@gmail.com"])
+		# msg.body = "Yo!\nHave you heard the good word of Python???"           
+		# mail.send(msg)
+		db.session.commit()
 
-		db.session.flush()
 		db.session.add(reservation)
 		db.session.commit()
 
-
-		
-		# db.session.commit()
 		return redirect('/reserve_guest')
 	return render_template('reservation/reserv.html', form = form)
 
 	
 @app.route('/reserve_guest')
 def reserve_guest():
-
 	return "All done"
 
 
 
+
 @app.route("/index")
+@login_required
 def index():
-	return "Hello World"
+	#show Guest has not check in and today is the check in day
+	result1 = Reservation.query.filter(Reservation.check_in == False).filter_by(date_in = date.today()).all()
+	#show guests that check out day is today
+	result2 = Reservation.query.filter(Reservation.check_out == False).filter_by(date_out = date.today()).all()
+	#current Guests
+	curr_result = Reservation.query.filter(Reservation.check_in == True).filter_by(date_in = date.today()).all()
+
+	return render_template('index.html', result1 = result1, result2 = result2, curr_result = curr_result)
+
+
+
+@app.route('/check_in/<int:reservation_id>')
+@login_required
+def check_in(reservation_id):
+	reservation = Reservation.query.filter_by(reservation_id = reservation_id).first()
+	reservation.check_in = True
+	reservation.check_out = False
+	db.session.commit()
+	flash('guest checked in')
+	return redirect('index')
+
+
+
+@app.route('/check_out/<int:reservation_id>')
+@login_required
+def check_out(reservation_id):
+	reservation = Reservation.query.filter_by(reservation_id = reservation_id).first()
+	reservation.check_out = True
+	db.session.commit()
+	flash('guest checked out')
+	return redirect(url_for('billing', reservation_id=reservation_id))
 
 
 
 
+@app.route('/billing/<int:reservation_id>')
+@login_required
+def billing(reservation_id):
+	result = Reservation.query.filter_by(reservation_id = reservation_id)
+	result2 = Room.query.filter(Room.room_num == Reservation.room_num)
+	return render_template('reservation/billing.html', result = result, result2 = result2)
 
 
 

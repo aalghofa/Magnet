@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Reservations{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+
+  <div class="col-md-offset-3 col-md-6">
+
+  
+    {% from "_formhelpers.html" import render_field %}
+    
+         
+
+      {% for reservation in curr_result %}
+      <div class="post-item">
+        <table class = "table table-bordered">
+          <caption>Current Guests </caption>
+   <thead>
+      <tr>
+         <th>First name</th>
+         <th>Last name</th>
+         <th>Check in </th>
+         <th>Check out </th>
+      </tr>
+   </thead>
+   
+   <tbody>
+      <tr> 
+        <td>{{ reservation.first_name }}</td>
+        <td>{{ reservation.last_name }}</td>
+        <td>{{ reservation.date_in }}</td>
+        <td>{{ reservation.date_out }}</td>
+      </tr>
+
+   </tbody>
+  
+</table>
+
+        <hr />
+           <a href="{{ url_for('check_out', reservation_id=reservation.reservation_id) }}">Check out</a>
+      </div>
+
+      {% endfor %}
+
+{% include '_flashmessages.html' %}
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manage Employees </title>
+
+ <!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Custom styles for this template -->
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/css/datepicker3.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/css/styles.css') }}">
+
+
+<!--Icons-->
+
+<script type="text/javascript" src="{{ url_for('static', filename='script/js/lumino.glyphs.js') }}"></script>
+
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+
+</head>
+
+<body>
+	{% block content %}
+	<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#"><span>Mag</span>net</a>
+				<ul class="user-menu">
+					<li class="dropdown pull-right">
+						{% if session.get('username') %}
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> {{session['username']}} <span class="caret"></span></a>
+						{% endif %}
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="{{ url_for('logout') }}"><svg class="glyph stroked cancel"><use xlink:href="#stroked-cancel"></use></svg> Logout</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+							
+		</div><!-- /.container-fluid -->
+	</nav>
+		
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+		<form role="search">
+			<div class="form-group">
+				<input type="text" class="form-control" placeholder="Search">
+			</div>
+		</form>
+		<ul class="nav menu">
+			<li ><a href="index"><svg class="glyph stroked dashboard-dial"><use xlink:href="#stroked-dashboard-dial"></use></svg> Dashboard</a></li>
+			<li><a href="{{ url_for('search')}}"><svg class="glyph stroked calendar"><use xlink:href="#stroked-calendar"></use></svg> Reservations</a></li>
+			{% if session.get('is_admin') %}
+			<li class="parent ">
+				<a href="#">
+					<span data-toggle="collapse" href="#sub-item-1"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Settings 
+				</a>
+				<ul class="children collapse" id="sub-item-1">
+					<li>
+						<a class="" href="addroom">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Add Room
+						</a>
+					</li>
+					<li>
+						<a class="" href="manageEmployees">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Manage Employees
+						</a>
+					</li>
+					<li>
+						<a class="" href="inactiveEmployee">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Inactive Employees
+						</a>
+					</li>
+				</ul>
+			</li>
+			{% endif %}
+
+			<li role="presentation" class="divider"></li>
+			<li><a href="{{ url_for('login')}}"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Login Page</a></li>
+		</ul>
+
+	</div><!--/.sidebar-->
+		
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+				<li class="active">Icons</li>
+			</ol>
+		</div><!--/.row-->
+		
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header">Manage Employees</h1>
+			</div>
+		</div><!--/.row-->
+
+
+		<div class="row">
+			
+			<div class="col-md-12">
+				<h3>Employees Info</h3>
+				
+				<div style="overflow-y: scroll; height:320px;" >
+      <div class="panel panel-default "  >
+        <div class="panel-heading">
+
+        </div>
+        <table class="table table-fixed table-striped">
+          <thead>
+            <tr>
+              <th class="col-xs-2">Name</th><th class="col-xs-2">username</th><th class="col-xs-2">Job Title</th><th class="col-xs-2">Email</th><th class="col-xs-2">Deactivate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+            	 {% for employee in active %}
+              <td class="col-xs-2">{{employee.fullname}}</td><td class="col-xs-2">{{employee.username}}</td><td class="col-xs-2">{{employee.job_title}}</td><td class="col-xs-2">{{employee.email}}</td>
+              {% if session.get('is_admin') %}
+              <td class="col-xs-2"><a  class="btn btn-danger btn-sm" role="button"href="{{ url_for('delete', employee_id=employee.id) }}">Deactivate</a> </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        
+      </div>
+				
+			</div><!--/.col-->
+			</div>
+			{% include '_flashmessages.html' %}
+		</div><!--/.row-->
+		
+		<div class="row">
+			
+			<div class="col-md-offset-1 col-md-10">
+				<h3>Add a new Employee</h3>
+				
+				<div style="overflow-y: scroll; height:450px;" >
+		{% from "_formhelpers.html" import render_field %}
+    <form method="POST" action="{{ url_for('register')}}" role="form">
+
+      {{ form.hidden_tag() }}
+      {{ render_field(form.fullname, class='form-control') }}
+      {{ render_field(form.username, class='form-control') }}
+      {{ render_field(form.ssn, class='form-control') }}
+      {{ render_field(form.email, class='form-control') }}
+      {{ render_field(form.DOB, class='form-control') }}
+      {{ render_field(form.job_title, class='form-control') }}
+      {{ render_field(form.password, class='form-control') }}
+      {{ render_field(form.confirm, class='form-control') }}
+
+      <button type="submit" class="btn btn-default">Register</button>
+      
+
+				
+			</div><!--/.col-->
+			</div>
+		</div><!--/.row-->
+<!--  Checkout table -->
+
+
+
+	</div>	<!--/.main-->
+<script type="text/javascript" src="{{ url_for('static', filename='script/js/jquery-1.11.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='script/js/chart.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='script/js/chart-data.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='script/js/easypiechart.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='script/js/easypiechart-data.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='script/js/bootstrap-datepicker.js') }}"></script>
+
+	<script>
+		$('#calendar').datepicker({
+		});
+
+		!function ($) {
+		    $(document).on("click","ul.nav li.parent > a > span.icon", function(){          
+		        $(this).find('em:first').toggleClass("glyphicon-minus");      
+		    }); 
+		    $(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
+
+		$(window).on('resize', function () {
+		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		})
+		$(window).on('resize', function () {
+		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+		})
+	</script>	
+</body>
+
+</html>
+{% endblock %}

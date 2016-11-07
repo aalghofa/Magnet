@@ -1,32 +1,85 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login</title>
 
-{% block title %}Employee Login{% endblock %}
 
-{% block content %}
+ <!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
-<div class="row">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-  <div class="col-md-offset-3 col-md-6">
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <h3>Employee Login</h3>
+    <!-- Custom styles for this template -->
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/css/datepicker3.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/css/styles.css') }}">
 
-    {% if error %}
-    <div class="error text-danger">{{ error }}</div>
-    {% endif %}
 
-    {% from "_formhelpers.html" import render_field %}
-    <form method="POST" action="{{ url_for('login')}}" role="form">
 
-      {{ form.hidden_tag() }}
+<!--[if lt IE 9]>
+<script src="js/html5shiv.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
 
-      {{ render_field(form.username, class='form-control') }}
-      {{ render_field(form.password, class='form-control') }}
+</head>
 
-      <button type="submit" class="btn btn-default">Login</button>
+<body>
+	{% block content %}
+	<div class="row">
+		<div class="col-md-offset-3 col-md-6">
+			<div class="login-panel panel panel-default">
+				<div class="panel-heading">Log in</div>
+				<div class="panel-body">
+					{% if error %}
+					<div class="error text-danger">{{ error }}</div>
+					{% endif %}
+					{% from "_formhelpers.html" import render_field %}
 
-    </form>
+					<form method="POST" action="{{ url_for('login')}}" role="form">
 
-  </div>
+						{{ form.hidden_tag() }}
 
-</div>
+						{{ render_field(form.username, class='form-control') }}
+						{{ render_field(form.password, class='form-control') }}
+
+						<button type="submit" class="btn btn-primary">Login</button>
+
+					</form>
+				</div>
+			</div>
+		</div><!-- /.col-->
+	</div><!-- /.row -->	
+	
+		
+
+	<script src="js/jquery-1.11.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/chart.min.js"></script>
+	<script src="js/chart-data.js"></script>
+	<script src="js/easypiechart.js"></script>
+	<script src="js/easypiechart-data.js"></script>
+	<script src="js/bootstrap-datepicker.js"></script>
+	<script>
+		!function ($) {
+			$(document).on("click","ul.nav li.parent > a > span.icon", function(){		  
+				$(this).find('em:first').toggleClass("glyphicon-minus");	  
+			}); 
+			$(".sidebar span.icon").find('em:first').addClass("glyphicon-plus");
+		}(window.jQuery);
+
+		$(window).on('resize', function () {
+		  if ($(window).width() > 768) $('#sidebar-collapse').collapse('show')
+		})
+		$(window).on('resize', function () {
+		  if ($(window).width() <= 767) $('#sidebar-collapse').collapse('hide')
+		})
+	</script>	
+</body>
+
+</html>
 {% endblock %}

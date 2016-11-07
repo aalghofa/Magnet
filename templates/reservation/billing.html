@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Results{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+  <div class="col-md-10">
+
+  
+    {% from "_formhelpers.html" import render_field %}
+   
+
+      {% for reservation in result %}
+      {% for room in result2 %}
+      {% if reservation.room_num == room.room_num%}
+      <div class="post-item">
+        <table class = "table table-bordered">
+   <caption>Billing Info</caption>
+
+   <thead>
+      <tr>
+         <th>First Name</th>
+         <th>Last Name</th>
+         <th>Price</th>
+         <th>Check in</th>
+         <th>Check out</th>
+         <th>Room Type</th>
+         <th>Tax</th>
+         <th>Total</th>
+
+      </tr>
+   </thead>
+   
+   <tbody>
+      <tr> 
+        <td>{{reservation.first_name}}</td>
+        <td>{{ reservation.last_name }}</td>
+        <td>{{ room.price }}</td>
+        <td>{{ reservation.date_in }} </td>
+        <td>{{ reservation.date_out }} </td>
+        <td>{{room.room_type}}</td>
+        <th>6.5%</th>
+        <td>{{room.price * 6}}</td>
+      </tr>
+
+   </tbody>
+  
+</table>
+		
+     <!--  <a href="{{ url_for('book', room_num=room.room_num) }}">Book</a> -->
+     <button onclick="myFunction()">Print this page</button>
+        <hr />
+      </div>
+       {% endif %}
+
+       {% endfor %}
+
+      {% endfor %}
+
+      
+
+
+  </div>
+
+</div>
+
+{% endblock %}

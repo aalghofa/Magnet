@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Reservations{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+
+  <div class="col-md-offset-3 col-md-6">
+
+  
+    {% from "_formhelpers.html" import render_field %}
+    
+         
+
+      {% for reservation in result1 %}
+      <div class="post-item">
+        <table class = "table table-bordered">
+          <caption>Guests arriving today</caption>
+
+   <thead>
+      <tr>
+         <th>First name</th>
+         <th>Last name</th>
+         <th>Check in </th>
+         <th>Check out </th>
+         <th>Room Number</th>
+      </tr>
+   </thead>
+   
+   <tbody>
+      <tr> 
+        <td>{{ reservation.first_name }}</td>
+        <td>{{ reservation.last_name }}</td>
+        <td>{{ reservation.date_in }}</td>
+        <td>{{ reservation.date_out }}</td>
+        <td>{{ reservation.room_num }}</td>
+      </tr>
+
+   </tbody>
+  
+</table>
+		
+    <a href="{{ url_for('check_in', reservation_id=reservation.reservation_id) }}">Check in</a> 
+    
+
+        <hr />
+      </div>
+
+      {% endfor %}
+
+      
+
+
+      {% for reservation in result2 %}
+      <div class="post-item">
+        <table class = "table table-bordered">
+  <caption>Guests departing today</caption>
+
+   <thead>
+      <tr>
+         <th>First name</th>
+         <th>Last name</th>
+         <th>Check in </th>
+         <th>Check out </th>
+         <th>Room Number</th>
+      </tr>
+   </thead>
+   
+   <tbody>
+      <tr> 
+        <td>{{ reservation.first_name }}</td>
+        <td>{{ reservation.last_name }}</td>
+        <td>{{ reservation.date_in }}</td>
+        <td>{{ reservation.date_out }}</td>
+        <td>{{ reservation.room_num }}</td>
+      </tr>
+
+   </tbody>
+  
+</table>
+    
+    <a href="{{ url_for('check_out', reservation_id=reservation.reservation_id) }}">Check out</a>
+
+
+        <hr />
+      </div>
+
+      {% endfor %}
+  {% include '_flashmessages.html' %}
+  <a href="{{ url_for('current_guests') }}">Current Guests</a>
+  </div>
+  <br>
+  <hr>
+
+</div>
+
+{% endblock %}

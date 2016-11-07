@@ -5,6 +5,6 @@ flask-script
 flask-wtf
 py-bcrypt
 flask-migrate
-flask_whooshalchemy
 datetime
-
+flask-whooshalchemy == 0.8
+flask-mail
