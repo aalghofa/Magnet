@@ -11,7 +11,8 @@ from reservation.models import Search, Reservation, Room
 from reservation.decorators import login_required, admin_required
 from datetime import date
 from flask.ext.mail import Mail, Message
-
+#this is forf the aws
+application = Flask(__name__)
 
 
 # sending mail testing
