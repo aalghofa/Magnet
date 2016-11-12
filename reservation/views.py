@@ -10,8 +10,20 @@ from reservation.form import SearchForm, ReservationForm, AddRoomForm
 from reservation.models import Search, Reservation, Room
 from reservation.decorators import login_required, admin_required
 from datetime import date
-from sqlalchemy import text
-from flask_mail import Mail, Message
+from flask.ext.mail import Mail, Message
+
+
+
+# sending mail testing
+# @app.route('/send_mail')
+# def send_mail(to):
+#     msg = Message(
+#     	'Hello',
+#     	sender='magnetreservations@gmail.com',
+#     	recipients=[to])
+#     msg.body = "This is the email body"
+#     msg.html = render_template('reservation/invoice/<int:reservation_id>.html')
+#     mail.send(msg)
 
 
 #add routes
@@ -26,10 +38,11 @@ def search():
 			)
 		first_check = Room.query.filter_by(status = True).all()
 		second_check = Room.query.filter(Room.book_release <= search.date_in).all()
-		third_check = Room.query.filter(Room.book_release > search.date_in).all()
+		third_check = Room.query.filter(Room.book_release > search.date_in).count()
+		count_Rooms = Room.query.count()
 
-		#if date is not correct
-		if form.date_in.data >= form.date_out.data:
+		#if date is not correct or the date in is past (for example the input date in yesterday)
+		if form.date_in.data >= form.date_out.data or form.date_in.data < date.today():
 			flash ("Please enter a valid date")
 
 		#if all the rooms are avalible	
@@ -38,7 +51,7 @@ def search():
 			return render_template('reservation/result.html', result = result_sta)
 
 		# if there are no rooms availble
-		elif third_check:
+		elif third_check >=count_Rooms:
 			flash ("No rooms available, Please Select another date")
 
 
@@ -107,23 +120,32 @@ def reserv():
 		room = Room.query.filter_by(room_num = session['room_num']).first()
 		room.book_from = form.date_in.data
 		room.book_release = form.date_out.data
-		# msg = Message("Send Mail Tutorial!",
-		# 	sender="magnetreservations@gmail.com",
-		# 	recipients=["magnetreservations@gmail.com"])
-		# msg.body = "Yo!\nHave you heard the good word of Python???"           
-		# mail.send(msg)
+
+		first_name = form.first_name.data
+		last_name = form.last_name.data
+		date_in = form.date_out.data
+		date_out = form.date_out.data
+		##confirmation email
+		msg = Message('Magnet Reservation',
+			sender='magnetreservations@gmail.com',
+			recipients=[form.email.data])
+		msg.body = "This is the email body"
+		msg.html = render_template('reservation/booking_confirm.html', first_name = first_name, last_name=last_name,
+			date_in=date_in,date_out=date_out)
+		mail.send(msg)
 		db.session.commit()
 
 		db.session.add(reservation)
 		db.session.commit()
 
-		return redirect('/reserve_guest')
+		return redirect('/res_confirm')
 	return render_template('reservation/reserv.html', form = form)
 
-	
-@app.route('/reserve_guest')
+
+
+@app.route('/res_confirm')
 def reserve_guest():
-	return "All done"
+	return render_template('reservation/res_confirm.html')
 
 
 
@@ -160,18 +182,31 @@ def check_out(reservation_id):
 	reservation = Reservation.query.filter_by(reservation_id = reservation_id).first()
 	reservation.check_out = True
 	db.session.commit()
+	
 	flash('guest checked out')
-	return redirect(url_for('billing', reservation_id=reservation_id))
+
+	return redirect(url_for('invoice', reservation_id=reservation_id))
 
 
 
 
-@app.route('/billing/<int:reservation_id>')
+@app.route('/invoice/<int:reservation_id>')
 @login_required
-def billing(reservation_id):
+def invoice(reservation_id):
 	result = Reservation.query.filter_by(reservation_id = reservation_id)
 	result2 = Room.query.filter(Room.room_num == Reservation.room_num)
-	return render_template('reservation/billing.html', result = result, result2 = result2)
+	for reservation in result:
+		for room in result2:
+			if reservation.room_num == room.room_num:
+				msg = Message(
+					'Magnet Reservation Invoice',
+					sender='magnetreservations@gmail.com',
+					recipients=[reservation.email])
+				msg.body = "This is the email body"
+				msg.html = render_template('reservation/invoice.html',result = result, result2 = result2, created=date.today())
+				mail.send(msg)
+
+	return render_template('reservation/invoice.html', result = result, result2 = result2, created=date.today())
 
 
 

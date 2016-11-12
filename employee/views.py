@@ -35,7 +35,7 @@ def login():
             error = "employee not found"
     return render_template('employee/login.html', form=form, error=error)
 
-@app.route("/manageEmployees", methods=('GET', 'POST'))
+@app.route("/addEmployees", methods=('GET', 'POST'))
 #admin is required to fill the form in order to add a Receptionist
 @admin_required
 def register():
@@ -54,57 +54,73 @@ def register():
             is_admin = True
         else:
             is_admin = False
-        live = False
+        live = True
         employee = Employee(fullname,ssn,email,DOB,job_title,username,password,is_admin,live)
         db.session.add(employee)
         db.session.commit()
-
-        return redirect('/success')
-    return render_template('manageEmployees.html', form=form)
+        flash ("Employee is added")
+        return redirect('/addEmployees')
+    return render_template('addEmployees.html', form=form)
 
 ##########################list of Active employees #####################
-@app.route('/manageEmployees')
+@app.route('/admin')
 @login_required
 @admin_required
-def admin():
-    #posts = Employee.query.order_by(Employee.id.desc())
-    active = Employee.query.filter_by(live=True).order_by(Employee.id.desc())
-    return render_template('manageEmployees.html', active=active)
-
-@app.route('/success')
-@login_required
-def success():
-    return "employee registered!"
+def active():
+    active = Employee.query.filter_by(live = True).order_by(Employee.id.desc())
+    return render_template('employee/admin.html', active=active)
 
 
-@app.route('/manageEmployees/<int:employee_id>')
+@app.route('/admin/<int:employee_id>')
 @admin_required
 def delete(employee_id):
     employee = Employee.query.filter_by(id=employee_id).first_or_404()
     employee.live = False
     db.session.commit()
     flash("Employee deleted")
-    return redirect('/manageEmployees')
+    return redirect('/admin')
 
+###################### List of employees testing #############
 
-
-############################### Deactivated Employeees ################
-@app.route('/inactiveEmployee')
+@app.route('/manageEmployee')
 @login_required
 @admin_required
-def inactive():
-    #posts = Employee.query.order_by(Employee.id.desc())
+def active_emp():
+    active = Employee.query.filter_by(live = True).order_by(Employee.id.desc())
     inactive = Employee.query.filter_by(live=False).order_by(Employee.id.desc())
-    return render_template('inactiveEmployee.html', inactive=inactive)
+    return render_template('manageEmployee.html', active=active, inactive=inactive)
 
-@app.route('/inactiveEmployee/<int:employee_id>')
+
+
+@app.route('/manageEmployee/<int:employee_id>')
 @admin_required
 def reactivate(employee_id):
     employee = Employee.query.filter_by(id=employee_id).first_or_404()
     employee.live = True
     db.session.commit()
     flash("Employee Activated")
-    return redirect('/inactiveEmployee')
+    return redirect('/manageEmployee')
+
+
+@app.route('/manageEmployee/<int:employee_id>')
+@admin_required
+def deactivate(employee_id):
+    employee = Employee.query.filter_by(id=employee_id).first_or_404()
+    employee.live = False
+    db.session.commit()
+    flash("Employee deleted")
+    return redirect('/manageEmployee')
+
+############################### Deactivated Employeees ################
+# @app.route('/manageEmployee')
+# @login_required
+# @admin_required
+# def inactive():
+#     #posts = Employee.query.order_by(Employee.id.desc())
+#     inactive = Employee.query.filter_by(live=False).order_by(Employee.id.desc())
+#     return render_template('manageEmployee.html', inactive=inactive)
+
+
 
 @app.route('/logout')
 def logout():

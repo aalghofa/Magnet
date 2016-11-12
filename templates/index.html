@@ -78,13 +78,13 @@
 						</a>
 					</li>
 					<li>
-						<a class="" href="manageEmployees">
-							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Manage Employees
+						<a class="" href="addEmployees">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Add Employees
 						</a>
 					</li>
 					<li>
-						<a class="Red" href="inactiveEmployee">
-							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Inactive Employees
+						<a class="Red" href="manageEmployee">
+							<svg class="glyph stroked chevron-right"><use xlink:href="#stroked-chevron-right"></use></svg> Manage Employees
 						</a>
 					</li>
 				</ul>
@@ -116,11 +116,9 @@
 			<div class="col-md-12">
 				<h3>Guests arriving today</h3>
 				
-				<div style="overflow-y: scroll; height:400px;" >
+				<div style="overflow-y: scroll; height:390px;" >
       <div class="panel panel-default "  >
-        <div class="panel-heading">
 
-        </div>
         <table class="table table-fixed table-striped">
           <thead>
             <tr>
@@ -139,7 +137,7 @@
       </div>
       
 
-				
+				{% include '_flashmessages-success.html' %}
 			</div><!--/.col-->
 			</div>
 		</div><!--/.row-->
@@ -149,11 +147,9 @@
 			<div class="col-md-12">
 				<h3>Guests departing today</h3>
 				
-				<div style="overflow-y: scroll; height:400px;" >
+				<div style="overflow-y: scroll; height:390px;" >
       <div class="panel panel-default "  >
-        <div class="panel-heading">
 
-        </div>
         <table class="table table-fixed table-striped">
           <thead>
             <tr>
@@ -170,7 +166,7 @@
         </table>
         
       </div>
-				
+				{% include '_flashmessages-success.html' %}
 			</div><!--/.col-->
 			</div>
 		</div><!--/.row-->
@@ -181,11 +177,9 @@
 			<div class="col-md-12">
 				<h3>Current Guests</h3>
 				
-				<div style="overflow-y: scroll; height:400px;" >
+				<div style="overflow-y: scroll; height:390px;" >
       <div class="panel panel-default "  >
-        <div class="panel-heading">
 
-        </div>
         <table class="table table-fixed table-striped">
           <thead>
             <tr>
@@ -204,10 +198,11 @@
       </div>
       
 
-				
+				{% include '_flashmessages-success.html' %}
 			</div><!--/.col-->
 			</div>
 		</div><!--/.row-->
+
 
 
 

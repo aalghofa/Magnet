@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,10 +9,11 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Welcome to Magnet</title>
+    <title>Carousel Template for Bootstrap</title>
 
- <!-- Bootstrap core CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
 
 <!-- jQuery library -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -21,41 +21,89 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+
     <!-- Custom styles for this template -->
-<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/carousel.css') }}">
 
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
+    <!-- Custom styles for this template -->
+    <link href="carousel.css" rel="stylesheet">
   </head>
-
+<!-- NAVBAR
+================================================== -->
   <body>
-{% block content %}
-    <div class="site-wrapper">
+    <div class="navbar-wrapper">
+      <div class="container">
 
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-          <div class="masthead clearfix">
-            <div class="inner">
-              <h3 class="masthead-brand" id="blue">MAG</h3><h3 class="masthead-brand" class="white">NET</h3>
-              <nav>
-                <ul class="nav masthead-nav">
-                  <li class="active"><a href="#">Home</a></li>
-                  <li><a href="{{ url_for('login')}}">Employee Sign in</a></li>
-                  <li><a href="#">Contact</a></li>
-                </ul>
-              </nav>
+        <nav class="navbar navbar-inverse navbar-static-top">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand bigger-font" href="#"><strong><span style="color: #30A5FF; font-size: 1.4em;">MAG</span><span style="color: white; font-size: 1.4em;">NET</span></strong></a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav navbar-right nav-font">
+                <li><a href="#"><strong>Home</strong></a></li>
+                <li><a href="#about"><strong>About</strong></a></li>
+                <li><a href="{{ url_for('login')}}"><strong>Employees Sign in</strong></a></li>
+                
+              </ul>
             </div>
           </div>
+        </nav>
 
-          <div class="inner cover">
-            <h1 class="cover-heading">Reserve Your Room</h1>
-           <!--  <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p> -->
-            <p class="lead">
+      </div>
+    </div>
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner" role="listbox">
+        <div class="item active">
+          <img class="first-slide" src="../../static/images/KingSizeBed-cropped.jpg" alt="First slide">
+ 
+        </div>
+        <div class="item">
+          <img class="second-slide" src="../../static/images/TwoDoubleBeds-cropped.jpg" alt="Second slide">
+
+        </div>
+        <div class="item">
+          <img class="third-slide" src="../../static/images/BreakfastAndCoffee-cropped.jpg" alt="Third slide">
+   
+        </div>
+      </div>
+      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+      <!-- search form -->
+      <div class="mainPitch" style="position:absolute; top:85px;">
+      <div class="container">
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-offset-4 col-md-5" style="text-align: center; background-color: rgba(0,0,0,0.6)">
                  {% from "_formhelpers.html" import render_field %}
-                 <h4>Enter check in/out dates</h4>
+                 <h3 style="color: white;">Enter check in/out dates</h3>
     <form method="POST" action="{{ url_for('search')}}" role="form">
 
       {{ form.hidden_tag() }}
@@ -66,20 +114,58 @@
       <button type="submit" class="btn btn-default">Search</button>
     </form>
      {% include '_flashmessages.html' %}
-            </p>
           </div>
 </div>
-</div>
-        </div>
-
       </div>
 
-    </div>
+</div>
 
-  
+</div>
+    </div><!-- /.carousel -->
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+    <div class="container marketing">
+
+     
+
+      <!-- START THE FEATURETTES -->
+
+
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <h2 class="featurette-heading">First featurette heading. <span class="text-muted">It'll blow your mind.</span></h2>
+          <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+        </div>
+        <div class="col-md-5">
+          <img class="featurette-image img-responsive center-block" src="../../static/images/BreakfastAndCoffee.jpeg" alt="Generic placeholder image">
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+     
+
+      <!-- /END THE FEATURETTES -->
+
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2016 Magnet, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
   </body>
 </html>
-
-{% endblock %}
-
-

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Employees{% endblock %}
+
+{% block content %}
+
+<div class="row">
+      
+      <div class="col-md-12">
+        <h3>Employees Info</h3>
+        
+        <div style="overflow-y: scroll; height:320px;" >
+      <div  >
+        <div >
+
+        </div>
+        <table class="table table-fixed table-striped">
+          <thead>
+            <tr>
+              <th class="col-xs-2">Name</th><th class="col-xs-2">username</th><th class="col-xs-2">Job Title</th><th class="col-xs-2">Email</th><th class="col-xs-2">Deactivate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+            {% for employee in active %}
+              <td class="col-xs-2">{{employee.fullname}}</td><td class="col-xs-2">{{employee.username}}</td><td class="col-xs-2">{{employee.job_title}}</td><td class="col-xs-2">{{employee.email}}</td>
+              {% if session.get('is_admin') %}
+              <td class="col-xs-2"><a class="btn btn-danger btn-sm" role="button"href="{{ url_for('delete', employee_id=employee.id) }}">Deactivate</a></td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        
+      </div>
+        
+      </div><!--/.col-->
+      </div>
+      {% include '_flashmessages.html' %}
+    </div><!--/.row-->
+    
+{% endblock %}
