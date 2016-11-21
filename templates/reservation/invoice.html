@@ -177,7 +177,7 @@
                 </td>
                 
                 <td>
-                    6.5%
+                   ${{"{:.2f}".format (room.price|float * 0.065)}}
                 </td>
             </tr>
             
@@ -187,7 +187,9 @@
                 </td>
                 
                 <td>
-                {{reservation.date_out - reservation.date_in}}
+               {{ stayNights}} Night(s)
+
+
                 </td>
             </tr>
             
@@ -195,7 +197,9 @@
                 <td></td>
                 
                 <td>
-                   Total: ${{room.price  *6}}
+                    Total: ${{"{:.2f}".format (total)}} 
+                
+                   <p id="demo"></p>
                 </td>
             </tr>
         </table>
@@ -205,5 +209,7 @@
        {% endfor %}
 
       {% endfor %}
+
+
 </body>
 </html>

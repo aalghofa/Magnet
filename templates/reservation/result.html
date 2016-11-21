@@ -1,22 +1,49 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-{% block title %}Results{% endblock %}
+    <title>Available Rooms</title>
 
-{% block content %}
+    <!-- Bootstrap core CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-<div class="row">
+<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/magnet.css') }}">
 
-  <div class="col-md-offset-3 col-md-6">
 
-  
-    {% from "_formhelpers.html" import render_field %}
-   
+  </head>
+  <body>
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+     
+      <a class="navbar-brand" href="{{url_for('search')}}"><strong><span style="color: #30A5FF; font-size: 1.7em;">MAG</span><span style="color: black; font-size: 1.7em;">NET</span></strong></a>
+    </div>
 
+      
+  </div>
+</nav>
+
+    <div class="row">
+
+  <div class="col-md-offset-2 col-md-7">   
       {% for room in result %}
       <div class="post-item">
-        <table class = "table table-bordered">
+        <div class="container">
+        <!-- <table class = "table table-bordered"> -->
+        <div class="col-md-6">
    <caption>Choose your room by clicking on book</caption>
-
+   <p><strong>{{ room.room_type }}</strong></p>
+   <img src="../../static/images/singleBed.jpeg"  height="180" width="220">
+   <div class="pull-right">{{ room.room_num }}</div>
+ </div>
+<!-- 
    <thead>
       <tr>
          <th>Room Number</th>
@@ -34,19 +61,26 @@
 
    </tbody>
   
-</table>
-		
-      <a href="{{ url_for('book', room_num=room.room_num) }}">Book</a>
-
-        <hr />
-      </div>
-      {% endfor %}
-
-      
-
-
-  </div>
-
+</table> -->
+<br>
+<div class="col-md-offset-2 col-md-4 fbox" >
+  <p style="padding: 2em 1em 3em 1em;"><strong style="font-size: 1.3em; color:#D41200;">$ {{ room.price }}</strong><br> <span style="font-size: 0.9em">Nightly price</span></p>
+  <div style="padding:1.5em 1em 2em 1em;">
+  <a href="{{ url_for('book', room_num=room.room_num) }}" class="btn btn-info" role="button">Book</a>
 </div>
 
-{% endblock %}
+</div>
+		
+     
+</div>
+        <hr />
+         {% endfor %}
+      </div>
+     
+      </div>
+
+
+</div>
+</body>
+
+

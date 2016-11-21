@@ -20,7 +20,6 @@ class Employee(db.Model):
     
     is_admin = db.Column(db.Boolean) #boolean: if true then admin if false then Receptionist, false by defalut(in case of admin need to be created var can be override)
     live = db.Column(db.Boolean)
-    #posts = db.relationship('Post', backref='employee', lazy='dynamic')
     
     def __init__(self, fullname, ssn, email, DOB, job_title, username, password, is_admin=False, live=True):
         self.fullname = fullname
@@ -35,3 +34,5 @@ class Employee(db.Model):
     # repr allows to interact witht the db from the terminal by calling it Employee and by its username
     def __repr__(self):
         return '<Employee %r>' % self.username
+
+

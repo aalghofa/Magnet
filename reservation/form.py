@@ -6,7 +6,7 @@
 # add libraries
 from flask_wtf import Form
 from wtforms import validators, StringField, PasswordField
-from wtforms.fields.html5 import EmailField, DateField, IntegerField
+from wtforms.fields.html5 import EmailField, DateField, IntegerField, DecimalField
 
 
 class SearchForm(Form):
@@ -15,9 +15,9 @@ class SearchForm(Form):
 	members = IntegerField('members', [validators.Required()])
 
 class AddRoomForm(Form):
-	room_num = StringField('room_num', [validators.Required()])
-	room_type = StringField('room_type', [validators.Required()])
-	price = IntegerField('price', [validators.Required()])
+	room_num = StringField('Room Number', [validators.Required()])
+	room_type = StringField('Room Type', [validators.Required()])
+	price = DecimalField('Price', [validators.Required()])
 
 
 #set class for reservation form

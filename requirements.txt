@@ -8,3 +8,4 @@ flask-migrate
 datetime
 flask-whooshalchemy == 0.8
 flask-mail
+itsdangerous

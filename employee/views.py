@@ -4,7 +4,7 @@ from employee.form import RegisterForm, LoginForm
 from employee.models import Employee
 from employee.decorators import login_required, admin_required
 import bcrypt
-
+# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
 @app.route('/login', methods=('GET', 'POST'))
 def login():
@@ -62,63 +62,41 @@ def register():
         return redirect('/addEmployees')
     return render_template('addEmployees.html', form=form)
 
-##########################list of Active employees #####################
-@app.route('/admin')
-@login_required
-@admin_required
-def active():
-    active = Employee.query.filter_by(live = True).order_by(Employee.id.desc())
-    return render_template('employee/admin.html', active=active)
 
 
-@app.route('/admin/<int:employee_id>')
-@admin_required
-def delete(employee_id):
-    employee = Employee.query.filter_by(id=employee_id).first_or_404()
-    employee.live = False
-    db.session.commit()
-    flash("Employee deleted")
-    return redirect('/admin')
-
-###################### List of employees testing #############
+###################### List of employees #############
 
 @app.route('/manageEmployee')
 @login_required
 @admin_required
 def active_emp():
     active = Employee.query.filter_by(live = True).order_by(Employee.id.desc())
+    #return redirect(url_for('deactivate',employee_id = Employee.id))
     inactive = Employee.query.filter_by(live=False).order_by(Employee.id.desc())
+   # return redirect(url_for('reactivate',employee_id = Employee.id))
     return render_template('manageEmployee.html', active=active, inactive=inactive)
 
 
-
+# change employees statuse. if active change to inactive, elseif inactive change it to active
 @app.route('/manageEmployee/<int:employee_id>')
 @admin_required
-def reactivate(employee_id):
+def changeStatus(employee_id):
+    
     employee = Employee.query.filter_by(id=employee_id).first_or_404()
-    employee.live = True
-    db.session.commit()
-    flash("Employee Activated")
-    return redirect('/manageEmployee')
+    liveEmp = employee.live ==True
+    NliveEmp = employee.live == False
 
+    if liveEmp:
+        employee.live = False
+        flash("Employee Deativated")
+        db.session.commit()
+        return redirect('/manageEmployee')
 
-@app.route('/manageEmployee/<int:employee_id>')
-@admin_required
-def deactivate(employee_id):
-    employee = Employee.query.filter_by(id=employee_id).first_or_404()
-    employee.live = False
-    db.session.commit()
-    flash("Employee deleted")
-    return redirect('/manageEmployee')
-
-############################### Deactivated Employeees ################
-# @app.route('/manageEmployee')
-# @login_required
-# @admin_required
-# def inactive():
-#     #posts = Employee.query.order_by(Employee.id.desc())
-#     inactive = Employee.query.filter_by(live=False).order_by(Employee.id.desc())
-#     return render_template('manageEmployee.html', inactive=inactive)
+    elif NliveEmp:
+        employee.live = True
+        flash("Employee Activated")
+        db.session.commit()
+        return redirect('/manageEmployee')
 
 
 

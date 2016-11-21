@@ -11,21 +11,6 @@ from reservation.models import Search, Reservation, Room
 from reservation.decorators import login_required, admin_required
 from datetime import date
 from flask.ext.mail import Mail, Message
-#this is forf the aws
-application = Flask(__name__)
-
-
-# sending mail testing
-# @app.route('/send_mail')
-# def send_mail(to):
-#     msg = Message(
-#     	'Hello',
-#     	sender='magnetreservations@gmail.com',
-#     	recipients=[to])
-#     msg.body = "This is the email body"
-#     msg.html = render_template('reservation/invoice/<int:reservation_id>.html')
-#     mail.send(msg)
-
 
 #add routes
 @app.route('/', methods=('GET', 'POST'))
@@ -52,7 +37,7 @@ def search():
 			return render_template('reservation/result.html', result = result_sta)
 
 		# if there are no rooms availble
-		elif third_check >=count_Rooms:
+		elif third_check >= count_Rooms:
 			flash ("No rooms available, Please Select another date")
 
 
@@ -98,6 +83,8 @@ def addroom():
 	return render_template('addroom.html', form = form)
     
 
+
+
 @app.route('/reserv', methods=('GET', 'POST'))
 def reserv():
 	form = ReservationForm()
@@ -124,7 +111,7 @@ def reserv():
 
 		first_name = form.first_name.data
 		last_name = form.last_name.data
-		date_in = form.date_out.data
+		date_in = form.date_in.data
 		date_out = form.date_out.data
 		##confirmation email
 		msg = Message('Magnet Reservation',
@@ -188,26 +175,32 @@ def check_out(reservation_id):
 
 	return redirect(url_for('invoice', reservation_id=reservation_id))
 
-
-
+#function to calculate the the number of nights for the invoice
+def diff_dates(date1, date2):
+    return abs(date2-date1).days
 
 @app.route('/invoice/<int:reservation_id>')
 @login_required
 def invoice(reservation_id):
+	tax= float(0.065)
 	result = Reservation.query.filter_by(reservation_id = reservation_id)
 	result2 = Room.query.filter(Room.room_num == Reservation.room_num)
 	for reservation in result:
 		for room in result2:
 			if reservation.room_num == room.room_num:
+				stayNights = diff_dates(reservation.date_out,reservation.date_in)
+				total =((tax * float(room.price)) + float(room.price)) * stayNights
 				msg = Message(
 					'Magnet Reservation Invoice',
 					sender='magnetreservations@gmail.com',
 					recipients=[reservation.email])
 				msg.body = "This is the email body"
-				msg.html = render_template('reservation/invoice.html',result = result, result2 = result2, created=date.today())
+				msg.html = render_template('reservation/invoice.html',result = result, result2 = result2,
+				 created=date.today(), total=total, stayNights=stayNights)
 				mail.send(msg)
 
-	return render_template('reservation/invoice.html', result = result, result2 = result2, created=date.today())
+	return render_template('reservation/invoice.html', result = result, result2 = result2, created=date.today(),
+		total=total, stayNights=stayNights)
 
 
 

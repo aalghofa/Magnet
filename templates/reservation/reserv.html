@@ -16,7 +16,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Custom styles for this template -->
-<link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/css/datepicker3.css') }}">
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/css/datepicker3.css') }}"> -->
 <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/css/styles.css') }}">
 
 
@@ -29,7 +29,17 @@
 </head>
 
 <body>
-	{% block content %}
+
+	<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+     
+      <a class="navbar-brand" href="{{url_for('search')}}"><strong><span style="color: #30A5FF; font-size: 1.7em;">MAG</span><span style="color: black; font-size: 1.7em;">NET</span></strong></a>
+    </div>
+
+  </div>
+</nav>
+	
 	<div class="row">
 		<div class="col-md-offset-3 col-md-6">
 			<div class="login-panel panel panel-default">
@@ -92,4 +102,3 @@
 </body>
 
 </html>
-{% endblock %}

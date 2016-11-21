@@ -41,7 +41,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#"><span>Mag</span>net</a>
+				<a class="navbar-brand" href="{{ url_for('index') }}"><span>Mag</span>net</a>
 				<ul class="user-menu">
 					<li class="dropdown pull-right">
 						{% if session.get('username') %}
@@ -49,6 +49,7 @@
 						{% endif %}
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="{{ url_for('logout') }}"><svg class="glyph stroked cancel"><use xlink:href="#stroked-cancel"></use></svg> Logout</a></li>
+
 						</ul>
 					</li>
 				</ul>
@@ -69,7 +70,7 @@
 			{% if session.get('is_admin') %}
 			<li class="parent ">
 				<a href="#">
-					<span data-toggle="collapse" href="#sub-item-1"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg></span> Settings 
+					<span data-toggle="collapse" href="#sub-item-1"><svg class="glyph stroked chevron-down"><use xlink:href="#stroked-chevron-down"></use></svg>Settings </span>
 				</a>
 				<ul class="children collapse" id="sub-item-1">
 					<li>
@@ -92,7 +93,7 @@
 			{% endif %}
 
 			<li role="presentation" class="divider"></li>
-			<li><a href="{{ url_for('login')}}"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg> Login Page</a></li>
+			<li><a href="{{ url_for('logout')}}"><svg class="glyph stroked male-user"><use xlink:href="#stroked-male-user"></use></svg>Log out</a></li>
 		</ul>
 
 	</div><!--/.sidebar-->
@@ -100,9 +101,10 @@
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
 		<div class="row">
 			<ol class="breadcrumb">
-				<li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
-				<li class="active">Icons</li>
+				<li><a href="{{ url_for('index') }}"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+				<li class="active">Add Room</li>
 			</ol>
+			{% include '_flashmessages-success.html' %}
 		</div><!--/.row-->
 		
 		<div class="row">
@@ -114,7 +116,7 @@
 		<div class="row">
 			
 			<div class="col-md-offset-1 col-md-10">
-				<h3>Add a Room</h3>
+
 				
 				<div style="overflow-y: scroll; height:450px;" >
     {% from "_formhelpers.html" import render_field %}
@@ -126,10 +128,12 @@
       {{ render_field(form.price, class='form-control') }}
 
       <button type="submit" class="btn btn-default">Add Room</button>
-     {% include '_flashmessages-success.html' %}			
+     			
 			</div><!--/.col-->
 			</div>
 		</div><!--/.row-->
+
+		
 
 
 
