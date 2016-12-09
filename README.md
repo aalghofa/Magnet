@@ -9,9 +9,9 @@
 # Compiling steps:
  *     Note: before you run the application, make sure you have python 3 installed on your machine. *
  
-1. clone MAGNET repository or download the zip file
-2. create a database using mysql
-3. edit settings.py file to configure your database:
+1. Clone MAGNET repository or download the zip file
+2. Create a database using mysql
+3. Edit settings.py file to configure your database:
 	- Update DB_USERNAME to your database username.
 	- Update DB_PASSWORD to your databse password.
 4. delete the venv directory if exists
