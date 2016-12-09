@@ -1,8 +1,8 @@
-# Project Name: MAGNET - Hotel Management System - Web Based Application
-# Project Version: 1.0
-# Devolpers: Abdullah Alghofaili & Yousef Alharbi
-# Course Name: Capstone Project
-# Semester: Fall 2016
+# Project Name: MAGNET ## - Hotel Management System 
+## Project Version: 1.0
+## Devolpers: Abdullah Alghofaili & Yousef Alharbi
+## Course Name: Capstone Project
+## Semester: Fall 2016
 ### This file demonstrates steps to run MAGNET.
 ### link to the application website: aalghofa.pythonanywhere.com
 
