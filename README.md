@@ -1,12 +1,12 @@
-# Project Name: MAGNET - Hotel Management System 
-## Project Version: 1.0
-## Devolpers: Abdullah Alghofaili & Yousef Alharbi
-## Course Name: Capstone Project
-## Semester: Fall 2016
-### This file demonstrates steps to run MAGNET.
-### link to the application website: aalghofa.pythonanywhere.com
+## Project Name: MAGNET - Hotel Management System 
+### Project Version: 1.0
+### Devolpers: Abdullah Alghofaili & Yousef Alharbi
+### Course Name: Capstone Project
+### Semester: Fall 2016
+#### This file demonstrates steps to run MAGNET.
+#### link to the application website: aalghofa.pythonanywhere.com
 
-# Compiling steps:
+## Compiling steps:
  *     Note: before you run the application, make sure you have python 3 installed on your machine. *
  
 1. Clone MAGNET repository or download the zip file
