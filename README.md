@@ -7,8 +7,9 @@
 ### link to the application website: aalghofa.pythonanywhere.com
 
 # Compiling steps:
- *     Note: before you run the application, make sure you have python 3 installed on your machine.
- 1. clone MAGNET repository or download the zip file
+ *     Note: before you run the application, make sure you have python 3 installed on your machine. *
+ 
+1. clone MAGNET repository or download the zip file
 2. create a database using mysql
 3. edit settings.py file to configure your database:
 	- Update DB_USERNAME to your database username.
