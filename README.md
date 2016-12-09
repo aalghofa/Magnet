@@ -24,9 +24,11 @@
 8. run the application by typing this command: 
     python manage.py runserver
 9. After you run the command in step 8, open manage.py file and comment the creation of your database. Comment the following lines in manage.py:
-	- from employee.models import *
-	- from reservation.models import *
-	- db.create_all()
+	~~~~
+	from employee.models import *
+	from reservation.models import *
+	db.create_all()
+	~~~~
 You need to create your database only once, therefore once you created it you do not need to create it again.
 
 10. Open web browser and type your localhost address as url link, you should see the application running.
