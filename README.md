@@ -16,13 +16,13 @@
 	- Update _DB_PASSWORD_ to your databse password.
 4. delete the **venv** directory if exists
 5. create a new virtual environment by typing this command:
-    ~~~~ 
+     
     virtualenv -p python3 venv
-    ~~~~
+    
 6. activate your virtual environment by typing this command:
-   ~~~~ 
+ 
    source venv/bin/activate
-   ~~~~
+   
 7. install the packages requirements:
   
    pip install -r requirements.txt
