@@ -1,4 +1,4 @@
-# Project Name: MAGNET ## - Hotel Management System 
+# Project Name: MAGNET - Hotel Management System 
 ## Project Version: 1.0
 ## Devolpers: Abdullah Alghofaili & Yousef Alharbi
 ## Course Name: Capstone Project
