@@ -24,13 +24,13 @@
    source venv/bin/activate
    ~~~~
 7. install the packages requirements:
-   ~~~~ 
+  
    pip install -r requirements.txt
-   ~~~~
+   
 8. run the application by typing this command: 
-   ~~~~ 
+  
    python _manage.py_ runserver
-   ~~~~
+  
 9. After you run the command in step 8, open manage.py file and comment the creation of your database. Comment the following lines in manage.py:
 	~~~~
 	from employee.models import *
