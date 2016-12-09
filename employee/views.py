@@ -60,6 +60,7 @@ def register():
         db.session.commit()
         flash ("Employee is added")
         return redirect('/addEmployees')
+        
     return render_template('addEmployees.html', form=form)
 
 
