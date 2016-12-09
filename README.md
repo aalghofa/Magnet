@@ -5,6 +5,7 @@
 ### Semester: Fall 2016
 #### This file demonstrates steps to run MAGNET.
 #### link to the application website: aalghofa.pythonanywhere.com
+#### GitHup repository link: https://github.com/aalghofa/Magnet
 
 ## Compiling steps:
  *     Note: before you run the application, make sure you have python 3 installed on your machine. *
